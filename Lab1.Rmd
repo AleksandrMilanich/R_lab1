@@ -1,0 +1,28 @@
+---
+title: "Lab1"
+author: "Milanich Alexander"
+date: "2022-10-31"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Task 1
+```{r warning=FALSE}
+setwd("C:/Users/drmil/Documents/R_scripts/Lab1")
+file <- read.csv(file = "lab1_e1.csv")
+source("task1.R")
+fixed_data <- fix_data(file)
+```
+
+#Task 2
+```{r warning=FALSE}
+setwd("C:/Users/drmil/Documents/R_scripts/Lab1")
+load("lab1_e2.Rdata")
+source("task2.R")
+result <- get_id(all_data)
+```
+
+
