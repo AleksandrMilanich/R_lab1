@@ -358,20 +358,44 @@ display: none;
 
 
 <p>#Task 1</p>
-<pre class="r"><code>setwd(&quot;C:/Users/drmil/Documents/R_scripts/Lab1&quot;)
-file &lt;- read.csv(file = &quot;lab1_e1.csv&quot;)
-source(&quot;task1.R&quot;)</code></pre>
+<pre class="r"><code>file &lt;- read.csv(file = &quot;lab1_e1.csv&quot;)
+
+StrToNum &lt;- function(column){
+  if (length(grep(&#39;[a-z]&#39;, column, ignore.case = T)) == 0)
+    column &lt;- as.double(gsub(&quot; &quot;, &quot;&quot;, column))
+  return(column)
+}
+
+fix_data &lt;- function(dataframe){
+  data.frame(lapply(dataframe, StrToNum))
+}
+
+fixed_data &lt;- fix_data(file)
+print(fixed_data)</code></pre>
 <pre><code>##        V1      V2      V3      V4      V5
 ## 1 -2.5935    II 2  0.4984 ST 123E -2.1544
 ## 2 -0.2888 ST 123E  1.5636 ST 123E  0.1053
 ## 3 -0.8286 ST 123E -0.9791  HP 129 -0.4989
 ## 4 -0.3220 ST 123E -0.3013  HP 129 -0.4032
 ## 5 -0.5588 ST 123E  1.2694  HP 129  0.7039</code></pre>
-<pre class="r"><code>fixed_data &lt;- fix_data(file)</code></pre>
 <p>#Task 2</p>
-<pre class="r"><code>setwd(&quot;C:/Users/drmil/Documents/R_scripts/Lab1&quot;)
-load(&quot;lab1_e2.Rdata&quot;)
-source(&quot;task2.R&quot;)</code></pre>
+<pre class="r"><code>load(&quot;lab1_e2.Rdata&quot;)
+
+MergeDF &lt;- function(dataframes){
+  new_dataframe &lt;- Reduce(function(x, y) merge(x, y, by=&#39;id&#39;), dataframes)
+  return(new_dataframe)
+}
+
+get_id &lt;- function(dataframes){
+  new_dataframe &lt;- MergeDF(dataframes)
+  dataframe_without_id &lt;- new_dataframe[, -1]
+  result &lt;- data.frame(id=new_dataframe$id, mean_temp=rowMeans(dataframe_without_id))
+  return(result)
+}
+  
+
+result &lt;- get_id(all_data)
+print(result)</code></pre>
 <pre><code>##    id mean_temp
 ## 1   1  36.37046
 ## 2   2  36.65626
@@ -387,7 +411,6 @@ source(&quot;task2.R&quot;)</code></pre>
 ## 12 14  36.39976
 ## 13 18  36.74270
 ## 14 19  36.74740</code></pre>
-<pre class="r"><code>result &lt;- get_id(all_data)</code></pre>
 
 
 
